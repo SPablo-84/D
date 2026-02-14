@@ -184,11 +184,18 @@
     if (extraEl) extraEl.style.display = "none";
 
     phraseEl.textContent = phrases[index];
-    imageEl.src = images[index];
-    imageEl.style.display = "block";
 
-    phraseEl.style.opacity = phrases[index] === "" ? 0 : 1;
-    imageEl.style.opacity = 1;
+// Si hay imagen, mostrarla
+if (images[index] && images[index] !== "") {
+  imageEl.src = images[index];
+  imageEl.style.display = "block";
+  imageEl.style.opacity = 1;
+} else {
+  imageEl.style.display = "none";
+}
+
+phraseEl.style.opacity = phrases[index] === "" ? 0 : 1;
+
 
     if (index === phrases.length - 1) {
       // Última imagen
