@@ -22,8 +22,8 @@
     }
     .container {
       text-align: center;
-      width: 500px;   /* ancho fijo */
-      height: 500px;  /* alto fijo */
+      width: 500px;
+      height: 500px;
       padding: 24px;
       border-radius: 20px;
       backdrop-filter: blur(10px);
@@ -37,13 +37,13 @@
     }
     img {
       width: 100%;
-      height: 250px;        /* altura fija dentro del cuadro */
+      height: 250px;
       border-radius: 16px;
       margin-bottom: 18px;
       background-color: #000;
       opacity: 0;
       transition: opacity 1s ease;
-      object-fit: contain;  /* se adapta sin recortar */
+      object-fit: contain;
     }
     h1 {
       font-size: 1.4rem;
@@ -54,6 +54,8 @@
     }
     .buttons {
       margin-top: 10px;
+      display: flex;
+      justify-content: center;
     }
     button {
       background: #FFA6E7;
@@ -77,14 +79,6 @@
       to { opacity: 1; transform: scale(1); }
     }
 
-    /* Reproductor de música */
-    #musicPlayer {
-      margin-top: 15px;
-      display: none;
-      align-self: center; /* centrado dentro del contenedor */
-    }
-
-    /* Fuegos artificiales */
     .fireworks {
       position: absolute;
       top: 0; left: 0;
@@ -104,7 +98,6 @@
       100% { transform: scale(5); opacity: 0; }
     }
 
-    /* Globos rojos */
     .balloon {
       position: absolute;
       bottom: -100px;
@@ -117,6 +110,11 @@
       0% { transform: translateY(0); opacity: 1; }
       100% { transform: translateY(-120vh); opacity: 1; }
     }
+
+    #resetBtn {
+      display: none;
+      margin: 0 auto;
+    }
   </style>
 </head>
 
@@ -126,21 +124,13 @@
     <h1 id="phrase">FELIZ 14 DE FEBRERO</h1>
     <h1 id="extra">TE QUIERO MUCHO LINDA!!</h1>
 
-    <div class="buttons">
-      <button onclick="nextVibe()">▶ Siguiente</button>
-      <button onclick="resetVibe()">🔄 Reiniciar</button>
+    <div class="buttons" id="buttonsContainer">
+      <button id="nextBtn" onclick="nextVibe()">▶ Siguiente</button>
+      <button id="resetBtn" onclick="resetVibe()">🔄 Reiniciar</button>
     </div>
-
-    <!-- Reproductor de música -->
-    <audio id="musicPlayer" controls>
-      <source src="tuCancion.mp3" type="audio/mpeg">
-      Tu navegador no soporta audio.
-    </audio>
   </div>
 
-  <!-- Contenedor de animaciones -->
   <div id="animations" class="fireworks" style="display:none;">
-    <!-- Fuegos artificiales extra -->
     <div class="firework" style="top:20%; left:30%; background:yellow;"></div>
     <div class="firework" style="top:50%; left:70%; background:pink;"></div>
     <div class="firework" style="top:70%; left:40%; background:orange;"></div>
@@ -149,7 +139,6 @@
     <div class="firework" style="top:60%; left:20%; background:purple;"></div>
     <div class="firework" style="top:80%; left:60%; background:blue;"></div>
     <div class="firework" style="top:40%; left:10%; background:red;"></div>
-    <!-- Globos -->
     <div class="balloon" style="left:5%;"></div>
     <div class="balloon" style="left:15%;"></div>
     <div class="balloon" style="left:30%;"></div>
@@ -178,14 +167,16 @@
     "img/p8.jpg","img/p7.jpg","img/p2.jpg","img/p3.jpg",
     "img/p11.jpg","img/p1.jpg","img/p6.jpg","img/p9.jpg",
     "img/p5.jpg","img/p4.jpg",
-    "img/final.jpg" // imagen final sin texto
+    "img/final.jpg"
   ];
 
   const phraseEl = document.getElementById("phrase");
   const imageEl = document.getElementById("vibeImage");
   const extraEl = document.getElementById("extra");
   const animationsEl = document.getElementById("animations");
-  const musicPlayer = document.getElementById("musicPlayer");
+  const nextBtn = document.getElementById("nextBtn");
+  const resetBtn = document.getElementById("resetBtn");
+  const buttonsContainer = document.getElementById("buttonsContainer");
 
   let index = -1;
 
@@ -199,13 +190,26 @@
     phraseEl.style.opacity = phrases[index] === "" ? 0 : 1;
     imageEl.style.opacity = 1;
 
-    // Activar animaciones y reproductor solo en la última imagen
     if (index === phrases.length - 1) {
+      // Última imagen
       animationsEl.style.display = "block";
-      musicPlayer.style.display = "block";
+
+      // Ocultar "Siguiente"
+      nextBtn.style.display = "none";
+
+      // Mostrar y centrar "Reiniciar"
+      resetBtn.style.display = "block";
+      buttonsContainer.style.display = "flex";
+      buttonsContainer.style.justifyContent = "center";
     } else {
+      // Imágenes intermedias
       animationsEl.style.display = "none";
-      musicPlayer.style.display = "none";
+
+      // Mostrar ambos botones
+      nextBtn.style.display = "inline-block";
+      resetBtn.style.display = "inline-block";
+      buttonsContainer.style.display = "block";
+      buttonsContainer.style.textAlign = "center";
     }
   }
 
@@ -216,17 +220,19 @@
   }
 
   function resetVibe() {
-  index = -1;
-  phraseEl.textContent = "FELIZ 14 DE FEBRERO";
-  phraseEl.style.opacity = 1;
-  imageEl.style.display = "none";
-  extraEl.style.display = "block";
-  animationsEl.style.display = "none";
-  musicPlayer.style.display = "none";
-  musicPlayer.pause();
-  musicPlayer.currentTime = 0; // reinicia la canción al inicio
-}
+    index = -1;
+    phraseEl.textContent = "FELIZ 14 DE FEBRERO";
+    phraseEl.style.opacity = 1;
+    imageEl.style.display = "none";
+    extraEl.style.display = "block";
+    animationsEl.style.display = "none";
 
+    // Restaurar botones 
+    nextBtn.style.display = "inline-block"; 
+    resetBtn.style.display = "none"; 
+    buttonsContainer.style.display = "block"; 
+    buttonsContainer.style.textAlign = "center";
+  }
 </script>
 </body>
 </html>
